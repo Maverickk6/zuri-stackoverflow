@@ -21,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("DJANGO_SECRET_KEY", default='django-insecure-%pdo&8c(3!f72padrjr^oi1%&cp5dro*7qp1a%la)1(rt3^9i0')
+SECRET_KEY = config("DJANGO_SECRET_KEY",
+                    default='django-insecure-%pdo&8c(3!f72padrjr^oi1%&cp5dro*7qp1a%la)1(rt3^9i0')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
@@ -38,10 +39,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 3rd party apps
     'django_extensions',
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    # local apps
     'apps.accounts.apps.AccountsConfig',
     'apps.questions.apps.QuestionsConfig',
-    'apps.common.apps.CommonConfig'
+    'apps.common.apps.CommonConfig',
+    'api.apps.ApiConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -105,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-#Authentication
+# Authentication
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 # Internationalization
@@ -130,3 +139,11 @@ STATICFILES_DIRS = [BASE_DIR/'static/']
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        'rest_framework.authentication.SessionAuthentication',
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    )
+}
